@@ -1,10 +1,8 @@
 # Site settings
-title: Code As Craft
+title: Dysfunctional Programming
 email: jon.abourbih@gmail.com
 description: >
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  (Dys)Functional and other programming topics. My interests lie in Clojure, functional programming, artificial intelligence topics, search and cats.
 baseurl: ""
 url: "https://jonbca.github.io"
 twitter_username: jonzo1
@@ -12,3 +10,7 @@ github_username:  jonbca
 
 # Build settings
 markdown: kramdown
+highlighter: rouge
+
+sass:
+  style: compressed
