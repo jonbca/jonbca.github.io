@@ -10,7 +10,6 @@ github_username:  jonbca
 
 # Build settings
 markdown: kramdown
-highlighter: rouge
 exclude:
   - Gemfile
   - Gemfile.lock
