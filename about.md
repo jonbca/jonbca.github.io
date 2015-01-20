@@ -4,8 +4,8 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+Howdy, there. I consult and develop software for [ThoughtWorks](http://www.thoughtworks.com) in the United Kingdom.
 
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
+Originally from the cold white North of Canada, I can nowadays be found living and working in temperate Glasgow, Scotland. I enjoy delicious coffee, craft beer, and oxford commas.
 
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+Please get in touch with me any time!
