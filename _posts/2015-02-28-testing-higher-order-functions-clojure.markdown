@@ -14,9 +14,9 @@ using Haskell. It opened my eyes, but I wondered about how applicable it
 might be in Clojure.
 
 ## Mocking with Midje
-My current project, uses [Midje][midje], which, among other
+My current project uses [Midje][midje] which, among other
 things, offers a way of "mocking" functions for testing purposes, via
-its `provided` function. Here's an example of some ring middleware that does request
+a `provided` function. Here's an example of some ring middleware that does request
 logging (namespace and requires declarations omitted):
 
 {% highlight clojure %}
@@ -123,3 +123,4 @@ applied to even slightly more complicated cases.
 [lars-hupel-twitter]: http://www.twitter.com/larsr_h
 [lars-hupel-talk]: http://www.lambdadays.org/lambdadays2015/lars-hupel
 [solid]: http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)
+[midje]: https://github.com/marick/Midje
