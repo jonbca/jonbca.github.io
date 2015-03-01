@@ -4,7 +4,7 @@ email: jon.abourbih@gmail.com
 description: >
   (Dys)Functional and other programming topics. My interests lie in Clojure, functional programming topics, code craftsmanship, AI, and cats.
 baseurl: ""
-url: "https://jonbca.github.io"
+url: "https://dysfunctional-programmer.co.uk/"
 twitter_username: jonzo1
 github_username:  jonbca
 
@@ -15,3 +15,5 @@ exclude:
   - Gemfile.lock
 sass:
   style: compressed
+gems:
+  - jekyll-mentions
