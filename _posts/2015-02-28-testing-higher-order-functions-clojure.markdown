@@ -6,16 +6,18 @@ categories: clojure
 tags:
  - clojure
  - testing
- - functional-programming
+ - lambda-days
 ---
 While attending [Lambda Days][lambda-days] in Kraków, I learned a lot
 about functional programming, and a *lot* more about F# (a.k.a.
 _F-hash_) than I ever wanted to know. But one of the things that
 intrigued me the most was about a topic that I had been struggling with:
 How do you mock in functional languages? Fortunately, [Lars
-Hupel][lars-hupel-twitter] gave an [excellent talk][lars-hupel-talk] on functional mocking
-using Haskell. It opened my eyes, but I wondered about how applicable it
-might be in Clojure.
+Hupel][lars-hupel-twitter] (@larsrh) gave an [excellent talk][lars-hupel-talk] on functional mocking
+using Haskell. It opened my eyes to some of the possibilities of
+functional programming that I'd never explored. In particular, he showed
+how monads in Haskell can make testing easier. I wondered about how applicable some
+of these principles might be in Clojure.
 
 ## Mocking with Midje
 My current project uses [Midje][midje] which, among other
@@ -32,7 +34,7 @@ logging (namespace and requires declarations omitted):
         (handler request)))
 {% endhighlight %}
 
-And here's a test that checks the logging occurred:
+And here's a test that sort-of checks the logging occurred:
 
 {% highlight clojure %}
 (fact "It logs something to the log"
@@ -43,13 +45,13 @@ And here's a test that checks the logging occurred:
                (log/info "user-agent ")   => anything)))
 {% endhighlight %}
 
-The `provided` functions act as traditional mocks, which produce a given
-output in response to an input, but also ensure that they have been
+The `provided` functions (called "prerequisites" in Midje) act as traditional mocks,
+which produce a given output in response to an input, but also ensure that they have been
 called with the specified arguments.
 
 Although this test passes, it smells funny. Let's set aside the fact
 that we're mocking functions we don't control (`log/info` comes from
-Clojure's logging library). `provided` just doesn't feel functional to
+Clojure's logging library). Midje prerequisites just don't feel functional to
 me, and what's more, *this test doesn't even test what I said it does*.
 
 In the `fact`, I said that I was checking "it logs something to the
@@ -74,8 +76,8 @@ introduce some helper things to replace `provided`:
          handler ((log-request-provider log-fn) (constantly response))]
      (handler {:uri "/"})
      (count @log) => 2
-     (first @log) => ["request-uri: /"]
-     (second @log) => ["user-agent: "])))
+     (first @log) => ["request-uri /"]
+     (second @log) => ["user-agent "])))
 {% endhighlight %}
 
 I also need to introduce a new higher-order function in my production code,
@@ -84,10 +86,11 @@ and slightly alter the existing `log-request` function:
 {% highlight clojure %}
 (defn- log-request
   [log-fn handler]
-    (fn [request]
-        (log-fn (str "request-uri " (:uri request)))
-        (log-fn (str "user-agent " (-> request :headers (get "user-agent"))))
-        (handler request)))
+  (fn [request]
+    (do
+      (log-fn (str "request-uri " (:uri request)))
+      (log-fn (str "user-agent " (get-in request [:headers "user-agent"])))
+      (handler request))))
 
 (defn log-request-provider
   [log-fn]
