@@ -2,10 +2,14 @@
 layout: post
 title: "Testing functions without mocking in Clojure"
 date: 2015-02-28
-categories: clojure testing
+categories: clojure
+tags:
+ - clojure
+ - testing
+ - functional-programming
 ---
 While attending [Lambda Days][lambda-days] in Kraków, I learned a lot
-about functional programming, and a *lot* more about F-Sharp (a.k.a.
+about functional programming, and a *lot* more about F# (a.k.a.
 _F-hash_) than I ever wanted to know. But one of the things that
 intrigued me the most was about a topic that I had been struggling with:
 How do you mock in functional languages? Fortunately, [Lars
@@ -53,26 +57,25 @@ log." But my test here only checks that `log/info` was called twice with
 those specific arguments. Not good.
 
 ## Mocking with Higher Order Functions
-Based on Lars's talk (*aside* It took him a full 13 minutes to use the
-word "Monad" in a Haskell talk, and for this I have enormous respect.) I
-wondered how I might fix my test so that it's:
+Based on Lars's talk, I wondered how I might fix my test so that it's:
 
-1. Actually testing what I intended to test, and
-2. More readable.
+1. Actually testing what I intended to test,
+2. More readable, and
+3. Less coupled to the implementation.
 
 First, I'll change the test to be what I want it to be. We'll need to
 introduce some helper things to replace `provided`:
 
-{% highlight clojure %}
+{% highlight clojure linenos %}
 (fact "request information gets logged"
-   (let [log-accumulator (atom [])
-         log-fn (fn [& args] (swap! log-accumulator conj args))
+   (let [log (atom [])
+         log-fn (fn [& args] (swap! log conj args))
          response {}
          handler ((log-request-provider log-fn) (constantly response))]
      (handler {:uri "/"})
-     (count @log-accumulator) => 2
-     (first @log-accumulator) => ["request-uri: /"]
-     (second @log-accumulator) => ["request-params: "])))
+     (count @log) => 2
+     (first @log) => ["request-uri: /"]
+     (second @log) => ["user-agent: "])))
 {% endhighlight %}
 
 I also need to introduce a new higher-order function in my production code,
@@ -105,7 +108,7 @@ times. Now, when I install this middleware, I just do:
 {% endhighlight %}
 
 and get the logging I had before. If I decide I now want these things
-logged at the warning level, I only have to change my code in one place.
+logged at the warning level, or to syslog, or kibana, I only have to change my code in one place.
 
 ## A brief note on Dependency Inversion
 If this looks familiar to OO developers, it should be. If you've been
@@ -121,6 +124,6 @@ applied to even slightly more complicated cases.
 
 [lambda-days]: http://lambdadays.org
 [lars-hupel-twitter]: http://www.twitter.com/larsr_h
-[lars-hupel-talk]: http://www.lambdadays.org/lambdadays2015/lars-hupel
+[lars-hupel-talk]: https://speakerdeck.com/larsrh/functional-mocking
 [solid]: http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)
 [midje]: https://github.com/marick/Midje
